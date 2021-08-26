@@ -1,7 +1,7 @@
 {
-	"pluginAlias": "AugustLocks",
+	"pluginAlias": "YaleDoormanL3",
 	"pluginType": "platform",
-	"headerDisplay": "August Smart Locks",
+	"headerDisplay": "Yale Doorman L3",
 	"footerDisplay": "This plugin is being Tested",
 	"schema": {
 		"type": "object",
@@ -9,7 +9,7 @@
 			"name": {
 				"title": "Name",
 				"type": "string",
-				"default": "AugustLocks",
+				"default": "YaleDoormanL3",
 				"required": true
 			},
 			"email": {

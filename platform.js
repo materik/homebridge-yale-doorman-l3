@@ -2,14 +2,14 @@ exports.AugustPlatform = void 0;
 
 const fs = require("fs");
 
-const ModuleName = "homebridge-august-smart-locks";
-const PlatformName = "AugustLocks";
+const ModuleName = "homebridge-yale-doorman-l3";
+const PlatformName = "YaleDoormanL3";
 
 class AugustPlatform {
   constructor(log, config, api) {
     this.log = log;
     this.platformLog = function (msg) {
-      log("[August]", msg);
+      log("[Yale Doorman L3]", msg);
     };
     this.Accessory = api.platformAccessory;
     this.Service = api.hap.Service;
@@ -51,7 +51,7 @@ class AugustPlatform {
     };
 
     this.augustApi = require("august-connect");
-    this.manufacturer = "AUGUST";
+    this.manufacturer = "Yale";
     this.accessories = {};
 
     if (api) {
@@ -129,7 +129,7 @@ class AugustPlatform {
       .on("set", self.setState.bind(self, accessory));
 
 
-      var batteryService = accessory.getService(self.Service.BatteryService) 
+    var batteryService = accessory.getService(self.Service.BatteryService) 
     if(batteryService) {
         batteryService
           .getCharacteristic(self.Characteristic.BatteryLevel);
@@ -140,13 +140,12 @@ class AugustPlatform {
         accessory.addService(self.Service.BatteryService);
       }
 
-    var service = accessory.getService(self.Service.ContactSensor);
-
-    if (service) {
-      service
-        .getCharacteristic(self.Characteristic.ContactSensorState)
-        .on("get", self.getDoorState.bind(self, accessory));
-    }
+    //  var service = accessory.getService(self.Service.ContactSensor);
+    //  if (service) {
+    //    service
+    //      .getCharacteristic(self.Characteristic.ContactSensorState)
+    //      .on("get", self.getDoorState.bind(self, accessory));
+    //  }
 
     accessory.on("identify", self.identify.bind(self, accessory));
   }
@@ -179,7 +178,7 @@ class AugustPlatform {
   // Method to get target lock state
   getTargetState(accessory, callback) {
     // Get target state directly from cache
-    callback(null, accessory.context.targetState);
+    callback(null, accessory.context.targetState || accessory.context.currentState);
   }
 
   // Method to get target door state
@@ -233,11 +232,14 @@ class AugustPlatform {
     var self = this;
 
     var lockService = accessory.getService(self.Service.LockMechanism);
-    var doorService = accessory.getService(self.Service.ContactSensor);
+    // var doorService = accessory.getService(self.Service.ContactSensor);
 
-    lockService.getCharacteristic(self.Characteristic.LockTargetState).updateValue(accessory.context.targetState);
-    lockService.getCharacteristic(self.Characteristic.LockCurrentState).updateValue(accessory.context.currentState);
-    doorService.getCharacteristic(self.Characteristic.ContactSensorState).updateValue(accessory.context.doorState);
+    lockService.getCharacteristic(self.Characteristic.LockTargetState)
+        .updateValue(accessory.context.targetState || accessory.context.currentState);
+    lockService.getCharacteristic(self.Characteristic.LockCurrentState)
+        .updateValue(accessory.context.currentState);
+    //  doorService.getCharacteristic(self.Characteristic.ContactSensorState)
+    //      .updateValue(accessory.context.doorState);
   
     var batteryService = accessory.getService(self.Service.BatteryService);
 
@@ -420,7 +422,7 @@ class AugustPlatform {
           var uuid = self.UUIDGen.generate(thisDeviceID);
           var _Accessory = self.Accessory;
           // Setup accessory as GARAGE_lock_OPENER (4) category.
-          newAccessory = new _Accessory("August " + thislockName, uuid, 6);
+          newAccessory = new _Accessory(thislockName, uuid, 6);
 
           // New accessory found in the server is always reachable
           newAccessory.reachable = true;
@@ -442,7 +444,7 @@ class AugustPlatform {
           newAccessory.context.low = self.low;
           // Setup HomeKit security systemLoc service
           newAccessory.addService(self.Service.LockMechanism, thislockName);
-          newAccessory.addService(self.Service.ContactSensor, thislockName);
+          //newAccessory.addService(self.Service.ContactSensor, thislockName);
           newAccessory.addService(self.Service.BatteryService, thislockName);
           // Setup HomeKit accessory information
           self.setAccessoryInfo(newAccessory);

@@ -1,5 +1,5 @@
 
-# Homebridge August Smart Locks Plugin
+# Homebridge Yale Doorman L3 Plugin
 
 This project is a homebridge plugin for August smart locks.
 A internet connected August Smart Lock is required for this plugin to work.
@@ -13,7 +13,7 @@ The August smart locks are exposed as a lock in HomeKit with support for:
 Please install the plugin with the following command:
 
 ```
-npm install -g homebridge-august-smart-locks
+npm install -g materik@homebridge-yale-doorman-l3
 ```
 
 or use the Homebridge Web Interface to setup the Plugin by searching for 'august'
@@ -24,13 +24,12 @@ or use the Homebridge Web Interface to setup the Plugin by searching for 'august
 {
     "platforms": [
         {
-            "platform": "AugustLocks",
+            "platform": "YaleDoormanL3",
             "email": "<YOUR-EMAIL-ADDRESS>",
             "phone": "<YOUR-PHONE-NUMBER>",
             "password": "<YOUR-PASSWORD>",
             "code": "<2FA-CODE>",
-            "installId": "<RANDOM-STATIC-STRING>",
-            "hideLocks": "<lockId>,<lockId>"
+            "installId": "<RANDOM-STATIC-STRING>"
         }
     ]
 }
